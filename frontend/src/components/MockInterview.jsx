@@ -5,7 +5,7 @@ const MockInterview = () => {
     <div className="bg-[#27395f]">
       <Header />
       <iframe
-        src="https://mocks-pnfz.onrender.com"
+        src={`${import.meta.env.VITE_MOCK_API}`}
         style={{ width: "100%", height: "100vh", border: "none" }}
       />
     </div>

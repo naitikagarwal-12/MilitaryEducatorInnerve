@@ -1,4 +1,4 @@
-const BASE_URL = "https://user-management-dfbx.onrender.com/api/auth";
+const BASE_URL = `${import.meta.env.VITE_USER_API}`
 
 export const registerUser = async (data) => {
   const res = await fetch(`${BASE_URL}/register`, {

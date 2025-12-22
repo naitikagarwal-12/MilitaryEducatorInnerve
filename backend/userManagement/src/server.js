@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite frontend
+    origin: "https://military-educator-innerve.vercel.app",
     credentials: true,
   })
 );

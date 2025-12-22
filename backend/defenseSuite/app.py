@@ -9,7 +9,7 @@ app = Flask(
 )
 
 CORS(app)  
-# --- 1. VERIFIED EXAM DATA (2025/2026) ---
+
 EXAM_DATA = {
     "NDA": {
         "title": "NDA & NA EXAMINATION (UPSC)",
