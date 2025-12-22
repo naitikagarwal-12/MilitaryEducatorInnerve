@@ -1,0 +1,21 @@
+{
+  "name": "militaryeducator",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd frontend && npm run dev",
+    "backend-defense": "cd backend && npm run defense",
+    "backend-mocks": "cd backend && npm run mocks",
+    "backend-user": "cd backend && npm run user",
+    "backend-all": "cd backend && npm run dev",
+
+    "dev": "concurrently \"npm run frontend\" \"npm run backend-all\""
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

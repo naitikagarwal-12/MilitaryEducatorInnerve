@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mock Interview | Military Educator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="main-container">
+    
+    <h1 class="page-title">Mock Interview</h1>
+
+    <div class="interview-card" id="card-panel">
+        <div class="corner-dot tl"></div>
+        <div class="corner-dot tr"></div>
+        <div class="corner-dot bl"></div>
+        <div class="corner-dot br"></div>
+
+        <div id="quiz-content">
+            <p id="q-tracker">Question 1 of 10</p>
+            <p id="q-text" class="question-text">{{ questions[0] }}</p>
+            
+            <textarea id="user-input" placeholder="Type your answer here..."></textarea>
+            
+            <div class="button-group">
+                <button id="btn-next" class="btn" onclick="nextQuestion()">Next Question</button>
+                <button id="btn-finish" class="btn" onclick="finishInterview()" style="display:none; background-color: #8B0000;">View Analysis</button>
+            </div>
+        </div>
+
+        <div id="loading-panel" style="display:none; text-align:center; padding-top: 50px;">
+            <div class="loader"></div>
+            <h2 style="font-family: 'Saira Stencil One', sans-serif;">Processing Tactical Data...</h2>
+        </div>
+
+        <div id="results-panel" style="display:none;">
+            <h2 style="font-family: 'Saira Stencil One', sans-serif;">Performance Report</h2>
+            <div class="results-grid">
+                <div class="result-box">
+                    <h3>Skill Scores</h3>
+                    <div id="bars-container"></div>
+                </div>
+                <div class="result-box">
+                    <h3>Critical Gaps</h3>
+                    <ul id="missing-list" style="padding-left: 20px;"></ul>
+                </div>
+            </div>
+            <button class="btn" onclick="downloadPDF()" style="width:100%; margin-top:20px;">Download PDF Report</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var questions = {{ questions|tojson }};
+    var currentIdx = 0;
+    var responses = [];
+    var reportData = null;
+
+    function nextQuestion() {
+        var input = document.getElementById('user-input');
+        if(input.value.trim() === "") return alert("Please enter an answer.");
+
+        responses.push(input.value);
+        input.value = ""; 
+        currentIdx++;
+
+        if(currentIdx < questions.length) {
+            document.getElementById('q-tracker').innerText = `Question ${currentIdx + 1} of 10`;
+            document.getElementById('q-text').innerText = questions[currentIdx];
+
+            if (currentIdx === questions.length - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-finish').style.display = 'block';
+            }
+        }
+    }
+
+    async function finishInterview() {
+        var input = document.getElementById('user-input');
+        if(input.value.trim() === "") return alert("Please answer the final question.");
+        
+        responses.push(input.value);
+        document.getElementById('quiz-content').style.display = 'none';
+        document.getElementById('loading-panel').style.display = 'block';
+
+        const res = await fetch('/analyze', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({responses: responses})
+        });
+
+        reportData = await res.json();
+        renderDashboard(reportData);
+    }
+
+    function renderDashboard(data) {
+        document.getElementById('loading-panel').style.display = 'none';
+        document.getElementById('results-panel').style.display = 'block';
+
+        let barsHtml = "";
+        if(data.metrics) {
+            for (const [skill, score] of Object.entries(data.metrics)) {
+                let width = score > 100 ? 100 : score;
+                barsHtml += `
+                    <div style="margin-bottom:10px;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <strong>${skill}</strong>
+                            <span>${score}%</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar-fill" style="width:${width}%;"></div>
+                        </div>
+                    </div>`;
+            }
+        }
+        document.getElementById('bars-container').innerHTML = barsHtml;
+
+        let missingHtml = "";
+        if(data.missing_elements && data.missing_elements.length > 0) {
+            data.missing_elements.forEach(item => {
+                missingHtml += `<li><strong>Q${item.q_num}:</strong> ${item.missing}</li>`;
+            });
+        } else {
+            missingHtml = "<p>No critical gaps found.</p>";
+        }
+        document.getElementById('missing-list').innerHTML = missingHtml;
+    }
+
+    async function downloadPDF() {
+        if(!reportData) return;
+        const res = await fetch('/download_pdf', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(reportData)
+        });
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "Defense_Mock_Interview.pdf";
+        document.body.appendChild(a);
+        a.click();
+    }
+</script>
+
+</body>
+</html>

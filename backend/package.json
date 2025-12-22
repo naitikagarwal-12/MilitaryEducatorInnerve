@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "defense": "cd defenseSuite && python app.py",
+    "mocks": "cd mocks && python app.py",
+    "user": "cd userManagement && npm run start",
+    "dev": "concurrently \"npm run defense\" \"npm run mocks\" \"npm run user\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

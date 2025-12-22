@@ -1,0 +1,218 @@
+/* IMPORT FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Saira+Extra+Condensed:wght@400;600;700&family=Saira+Stencil+One&display=swap');
+
+:root {
+    --bg-brown: #A68A73;       
+    --nav-blue: #1C2331;       
+    --card-green: #9CB071;     
+    --btn-dark-green: #4B582F; 
+    --text-black: #000000;
+    --text-white: #ffffff;
+}
+
+body {
+    background-color: var(--bg-brown);
+    margin: 0;
+    padding: 0;
+    padding-bottom: 120px; /* Space for the fixed bottom bar */
+    color: var(--text-black);
+    min-height: 100vh;
+    font-family: 'Saira Extra Condensed', sans-serif;
+}
+
+/* --- PAGE TITLE --- */
+h1.page-title {
+    font-family: 'Saira Stencil One', sans-serif;
+    font-size: 4.5rem;
+    color: black;
+    margin-top: 60px; /* Added margin since top nav is gone */
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* --- INTERVIEW CARD --- */
+.main-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.interview-card {
+    background-color: var(--card-green);
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    border: 3px solid #4B582F;
+    position: relative;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Corners */
+.corner-dot {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border-radius: 50%;
+    border: 1px solid #4B582F;
+}
+.tl { top: 15px; left: 15px; }
+.tr { top: 15px; right: 15px; }
+.bl { bottom: 15px; left: 15px; }
+.br { bottom: 15px; right: 15px; }
+
+/* Content Styles */
+#q-tracker {
+    font-family: 'Saira Stencil One', sans-serif;
+    color: #4B582F;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.question-text {
+    font-family: 'Saira Extra Condensed', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    line-height: 1.1;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid var(--btn-dark-green);
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1.4rem;
+    font-family: 'Saira Extra Condensed', sans-serif;
+    font-weight: 600;
+    color: #000;
+    resize: none;
+    box-sizing: border-box;
+}
+textarea:focus { outline: none; background: rgba(255, 255, 255, 0.9); }
+
+/* Buttons */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.btn {
+    background-color: var(--btn-dark-green);
+    color: white;
+    border: 2px solid #2f381d;
+    padding: 15px 40px;
+    border-radius: 10px;
+    font-family: 'Saira Stencil One', sans-serif;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+    min-width: 200px;
+}
+
+.btn:hover { background-color: #3a4525; transform: translateY(-2px); }
+
+/* --- BOTTOM NAVIGATION BAR --- */
+.bottom-nav {
+    background-color: var(--nav-blue);
+    height: 90px; /* Slightly taller for better spacing */
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%; /* 5% padding on sides */
+    border-top: 4px solid #000;
+    box-sizing: border-box;
+    z-index: 900;
+}
+
+/* 1. Logo (Left) */
+.nav-logo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.nav-logo img { height: 60px; } /* Bigger logo for bottom bar */
+
+/* 2. Links (Center) */
+.nav-links-container {
+    flex: 3; /* Gives lots of space to the center */
+    display: flex;
+    justify-content: center;
+    gap: 80px; /* HUGE GAP for spacing */
+}
+
+.nav-links-container a {
+    color: white;
+    text-decoration: none;
+    font-family: 'Saira Stencil One', sans-serif;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+}
+
+.nav-links-container a:hover, .nav-links-container a.active {
+    color: #FFD700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* 3. Bot Container (Right) */
+.bot-container {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: flex-end; /* Pushes bot to the far right */
+}
+
+.bot-icon {
+    position: absolute;
+    bottom: 15px; /* Pushes it UP so it overlaps the bar */
+    right: 0;
+    width: 90px;
+    height: 90px;
+    background: black;
+    border-radius: 50%;
+    border: 4px solid #FFD700;
+    display: flex;
+    align-items: center;
+    justify-content:left;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    z-index: 1000;
+    transition: transform 0.2s;
+}
+.bot-icon:hover { transform: scale(1.1); }
+.bot-icon img { width: 65%; }
+
+/* Loading & Results */
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid var(--btn-dark-green);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; }
+.result-box { background: rgba(255,255,255,0.9); padding: 25px; border-radius: 10px; color: black; }
+.result-box h3 { font-family: 'Saira Stencil One', sans-serif; margin-top: 0; }
+.bar-container { background: #ddd; height: 12px; border-radius: 6px; margin-top: 5px; }
+.bar-fill { height: 100%; border-radius: 6px; background: var(--btn-dark-green); }

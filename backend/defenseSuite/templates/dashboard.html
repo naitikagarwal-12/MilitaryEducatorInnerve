@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DEFENSE SELECTION SUITE | PRO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="brand">DEFENSE SELECTION SUITE</div>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <div class="col-left">
+            
+            <div class="panel large-panel">
+                <div class="panel-header">STAGE 1: SCREENING (DAY 1)</div>
+                <div class="panel-body">
+                    <h2 class="exam-title">OFFICER INTELLIGENCE RATING (OIR)</h2>
+                    <p>Verbal & Non-Verbal Reasoning. The first hurdle in SSB.</p>
+                    <div class="stat-box">
+                        <span>TARGET: OIR-1 (ELITE)</span>
+                    </div>
+                    <button class="btn-block" onclick="loadTest('OIR')">START OIR SIMULATION (20 QS)</button>
+                </div>
+            </div>
+
+            <div class="panel large-panel">
+                <div class="panel-header">STAGE 2: PSYCHOLOGY (DAY 2)</div>
+                <div class="panel-body">
+                    <h2 class="exam-title">PSYCH BATTERY</h2>
+                    <div class="btn-row">
+                        <div style="flex:1">
+                            <h3>WAT (Word Association)</h3>
+                            <p class="desc-text">15s Rapid Fire</p>
+                            <button class="btn-block" onclick="loadTest('WAT')">START WAT</button>
+                        </div>
+                        <div style="flex:1">
+                            <h3>SRT (Situation Reaction)</h3>
+                            <p class="desc-text">Practical Solutions</p>
+                            <button class="btn-block" onclick="loadTest('SRT')">START SRT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pathways-area" class="panel large-panel" style="display:none; border-color: #FFC107;">
+                <div class="panel-header" style="background:#856404;">VERIFIED ENTRY PATHS</div>
+                <div class="panel-body">
+                    <p style="margin-bottom:15px;">You are eligible for the following commissions based on official criteria:</p>
+                    <div id="path-grid" class="path-grid"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-right">
+            
+            <div class="panel side-panel">
+                <div class="panel-header">ELIGIBILITY CHECK</div>
+                <div class="panel-body">
+                    <label>Gender</label>
+                    <select id="gender"><option value="Male">Male</option><option value="Female">Female</option></select>
+                    
+                    <label>Age (e.g., 20.5)</label>
+                    <input type="number" id="age" step="0.1" placeholder="Years.Months">
+                    
+                    <label>Qualification</label>
+                    <select id="edu">
+                        <option value="12th">12th Pass (PCM)</option>
+                        <option value="Grad">Graduate (Any)</option>
+                        <option value="Eng">B.Tech / B.E.</option>
+                    </select>
+
+                    <button class="btn-verify" onclick="verifyElig()">VERIFY NOW</button>
+                    
+                    <div id="elig-msg" class="error-text"></div>
+                </div>
+            </div>
+
+            <div class="panel side-panel" style="flex-grow:1;">
+                <div class="panel-header">OFFICER MANUALS (DETAILED)</div>
+                <div class="panel-body">
+                    <button class="btn-manual" onclick="openManual('ARMY')">INDIAN ARMY ></button>
+                    <button class="btn-manual" onclick="openManual('NAVY')">INDIAN NAVY ></button>
+                    <button class="btn-manual" onclick="openManual('AIR')">INDIAN AIR FORCE ></button>
+                    <p style="font-size:0.8rem; margin-top:20px; opacity:0.7;">
+                        *Contains detailed exam structure, service motto, and day-wise SSB breakdown.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="mainModal" class="modal-backdrop">
+        <div class="modal-window">
+            <div class="modal-top">
+                <h3 id="m-title">TITLE</h3>
+                <span id="m-timer" style="color:#A93226; font-weight:bold;"></span>
+            </div>
+            <div id="m-content" class="modal-scroll"></div>
+            <div class="modal-bot">
+                <button class="btn-close" onclick="closeModal()">CLOSE PANEL</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
