@@ -2,7 +2,7 @@ import os
 import json
 import re
 from dotenv import load_dotenv
-from google import genai
+import google.generativeai as genai
 
 # 1. LOAD KEYS
 load_dotenv()
