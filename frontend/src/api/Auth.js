@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5400/api/auth";
+const BASE_URL = "https://user-management-dfbx.onrender.com/api/auth";
 
 export const registerUser = async (data) => {
   const res = await fetch(`${BASE_URL}/register`, {
