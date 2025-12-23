@@ -5,9 +5,23 @@ import img2 from "../assets/services/img2.jpeg";
 import img3 from "../assets/services/img3.jpeg";
 import img4 from "../assets/services/img4.jpeg";
 import { useNavigate } from "react-router-dom";
+import lenis from "../lenis";
 
 const Services = () => {
   const navigate = useNavigate();
+
+    const scrollToSection = (targetId) => {
+    requestAnimationFrame(() => {
+      const section = document.getElementById(targetId);
+      if (!section || !lenis) return;
+
+      lenis.scrollTo(section, {
+        offset: -50,
+        duration: 1.2,
+        immediate: false,
+      });
+    });
+  };
 
   return (
     <section id="services" className="bg-[#b7987d] text-black p-5">
@@ -41,7 +55,7 @@ const Services = () => {
             heading={"AR/VR Immersive Learning"}
             button={
               <Button
-                onClick={() => {navigate("#")}}
+                onClick={() => {scrollToSection("model")}}
                 classname={"bg-[#5d6532] ring-2 ring-black/40 mt-5 px-2"}
               >
                 AR/VR Mode
