@@ -20,7 +20,7 @@ function MockDrillPage({ service }) {
     <>
       {/* ================= MOCK DRILLS PAGE ================= */}
       <section
-        className="min-h-screen w-full overflow-x-hidden py-10 sm:py-12"
+        className=" w-full overflow-x-hidden py-10 sm:py-12"
         style={{
           background: drillTheme.background,
           fontFamily: theme.common.font

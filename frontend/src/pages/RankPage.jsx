@@ -10,7 +10,7 @@ function RankPage({ service }) {
   if (!ranks || ranks.length === 0) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center text-xl font-semibold"
+        className=" flex items-center justify-center text-xl font-semibold"
         style={{ background: theme.background }}
       >
         Data coming soon.
@@ -66,7 +66,7 @@ function RankPage({ service }) {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center pt-12 gap-8"
+      className=" flex flex-col items-center pt-12 gap-8"
       style={{ background: theme.background }}
     >
       {/* TITLE */}

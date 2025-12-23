@@ -18,7 +18,7 @@ const Defense = () => {
         </div>
 
         <div className="flex justify-center items-center saira-extra-condensed font-bold">
-          <div className="grid grid-cols-1 md:grid-cols-3 my-7 mt-15 w-[65%] sm:w-[55%] md:w-[85%]">
+          <div className="grid grid-cols-1 md:grid-cols-3 my-7 mt-15 w-[65%] sm:w-[55%] md:w-[85%] gap-2">
             <MilitaryCards
               imgClass={"max-h-40 w-auto"}
               image={navy}

@@ -13,7 +13,7 @@ function UniformPage({ service }) {
   if (!uniforms || uniforms.length === 0) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center
+        className=" flex items-center justify-center
                    text-base sm:text-xl font-semibold text-center px-4 "
         style={{
           background: theme.background,
@@ -27,7 +27,7 @@ function UniformPage({ service }) {
 
   return (
     <section
-      className="min-h-screen w-full overflow-x-hidden py-10 sm:py-12"
+      className=" w-full overflow-x-hidden py-10 sm:py-12"
       style={{ background: theme.background }}
     >
       {/* TITLE */}

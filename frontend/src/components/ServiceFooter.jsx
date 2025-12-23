@@ -4,17 +4,24 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { SiGmail } from "react-icons/si";
-import {
-  FaFacebookSquare,
-  FaInstagram,
-} from "react-icons/fa";
+import { FaFacebookSquare, FaInstagram } from "react-icons/fa";
 import { IoLogoLinkedin, IoLogoYoutube } from "react-icons/io5";
 import { FaSquareXTwitter } from "react-icons/fa6";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Footer = ({ theme }) => {
   if (!theme || !theme.footer) return null;
   const f = theme.footer;
+
+  const [active, setActive] = useState(null);
+
+  const toggle = (key) => {
+    if (window.innerWidth < 768) {
+      setActive((prev) => (prev === key ? null : key));
+    }
+  };
 
   const services = [
     { title: "AI Skill-Gap Analyzer", link: "/defense" },
@@ -35,17 +42,17 @@ const Footer = ({ theme }) => {
       style={{ background: f.background }}
     >
       {/* TOP BAR */}
-      <div className="md:flex justify-between items-center p-2 w-full md:max-w-[90%]">
-        <div className="ml-5 px-7 py-5 flex items-center gap-2">
+      <div className="md:flex justify-between items-center p-2 w-full md:max-w-[85%]">
+        <div className="ml-5 py-5 flex items-center gap-2 saira-stencil-one">
           <img src={logo} alt="Logo" className="h-16 lg:h-20 w-auto" />
-          <div className="text-2xl lg:text-3xl saira-stencil-one">
+          <div className="text-2xl lg:text-3xl">
             <p style={{ color: f.brand.military }}>Military</p>
             <p style={{ color: f.brand.educator }}>Educator</p>
           </div>
         </div>
 
         <p
-          className="text-sm md:text-md px-3 py-2 font-bold text-center saira-extra-condensed"
+          className="text-sm md:text-md xl:text-lg py-2 text-center px-5 saira-stencil-one"
           style={{ color: f.heading }}
         >
           "The One-Stop Platform for Tactical Intelligence and Exam Success"
@@ -53,32 +60,47 @@ const Footer = ({ theme }) => {
       </div>
 
       {/* MAIN GRID */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 w-full md:max-w-[95%] px-6 py-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-2 w-full py-5 lg:mb-5 place-items-center px-6">
 
         {/* LEFT */}
-        <div className="flex flex-col gap-3">
-          <Link to="/" className="font-bold text-lg" style={{ color: f.text }}>
+        <div className="flex flex-col items-center md:items-start gap-5 saira-stencil-one">
+          <Link to="/" className="text-2xl hover:scale-105 transition-all" style={{ color: f.text }}>
             Home
           </Link>
 
-          <Link to="/about" className="font-bold text-lg" style={{ color: f.text }}>
+          <Link to="/about" className="text-2xl hover:scale-105 transition-all" style={{ color: f.text }}>
             About Us
           </Link>
 
-          <div>
-            <p className="font-bold text-lg" style={{ color: f.heading }}>
-              Our Services
-            </p>
-            <ul className="mt-1 space-y-1 text-sm">
-              {services.map(s => (
+          {/* SERVICES */}
+          <div className="flex flex-col items-center md:items-start">
+            <div
+              onClick={() => toggle("services")}
+              className="flex items-center gap-2 cursor-pointer text-2xl hover:scale-105 transition-all"
+              style={{ color: f.text }}
+            >
+              <span>Our Services</span>
+              <IoMdArrowDropdown
+                className={`md:hidden transition-all ${
+                  active === "services" ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+
+            <ul
+              className={`space-y-1 mt-1 font-semibold
+              ${active === "services" ? "block" : "hidden"}
+              md:block`}
+            >
+              {services.map((s) => (
                 <li key={s.title}>
                   <Link
                     to={s.link}
-                    className="flex gap-2 items-center hover:underline"
+                    className="flex items-center gap-2 hover:underline"
                     style={{ color: f.text }}
                   >
-                    <FaArrowRightLong color={f.arrow} />
-                    <span>{s.title}</span>
+                    <FaArrowRightLong color={f.arrow} className="hidden md:block" />
+                    {s.title}
                   </Link>
                 </li>
               ))}
@@ -87,80 +109,108 @@ const Footer = ({ theme }) => {
         </div>
 
         {/* MIDDLE */}
-        <div className="flex flex-col gap-4">
-          <div>
-            <p className="font-bold text-lg" style={{ color: f.heading }}>
-              Defense System
-            </p>
-            <ul className="mt-1 space-y-1 text-sm">
-              {defense.map(d => (
+        <div className="flex flex-col gap-5 md:gap-2">
+          {/* DEFENSE */}
+          <div className="flex flex-col items-center md:items-start saira-stencil-one">
+            <div
+              onClick={() => toggle("defense")}
+              className="flex items-center gap-2 cursor-pointer text-2xl hover:scale-105 transition-all"
+              style={{ color: f.text }}
+            >
+              <span>Defense System</span>
+              <IoMdArrowDropdown
+                className={`md:hidden transition-all ${
+                  active === "defense" ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+
+            <ul
+              className={`space-y-1 mt-1 font-semibold
+              ${active === "defense" ? "block" : "hidden"}
+              md:block`}
+            >
+              {defense.map((d) => (
                 <li key={d.title}>
                   <Link
                     to={d.link}
-                    className="flex gap-2 items-center hover:underline"
+                    className="flex items-center gap-2 hover:underline"
                     style={{ color: f.text }}
                   >
-                    <FaArrowRightLong color={f.arrow} />
-                    <span>{d.title}</span>
+                    <FaArrowRightLong color={f.arrow} className="hidden md:block" />
+                    {d.title}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <p className="font-bold text-lg" style={{ color: f.heading }}>
-              Contact Us
-            </p>
+          {/* CONTACT */}
+          <div className="flex flex-col items-center md:items-start gap-2">
+            <div
+              onClick={() => toggle("contact")}
+              className="flex items-center gap-2 cursor-pointer text-2xl hover:scale-105 transition-all saira-stencil-one"
+              style={{ color: f.text }}
+            >
+              <span>Contact Us</span>
+              <IoMdArrowDropdown
+                className={`md:hidden transition-all ${
+                  active === "contact" ? "rotate-180" : ""
+                }`}
+              />
+            </div>
 
-            <ul className="mt-1 space-y-2 text-sm">
-              <li className="flex items-center gap-2" style={{ color: f.text }}>
-                <div className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
+            <ul
+              className={`space-y-1 font-semibold
+              ${active === "contact" ? "block" : "hidden"}
+              md:block`}
+              style={{ color: f.text }}
+            >
+              <li className="flex items-center gap-2">
+                <span className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
                   <BsFillTelephoneFill />
-                </div>
+                </span>
                 Toll No - 9xxxx xxxxx
               </li>
-              <li className="flex items-center gap-2" style={{ color: f.text }}>
-                <div className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
+              <li className="flex items-center gap-2">
+                <span className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
                   <FaMapMarkedAlt />
-                </div>
+                </span>
                 Kota, Rajasthan
               </li>
-              <li className="flex items-center gap-2" style={{ color: f.text }}>
-                <div className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
+              <li className="flex items-center gap-2">
+                <span className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
                   <SiGmail />
-                </div>
+                </span>
                 support@militaryeducator.in
               </li>
             </ul>
           </div>
         </div>
 
-        {/* RIGHT (DESKTOP) */}
-        <div className="hidden lg:block">
-          <p className="font-bold text-lg mb-1" style={{ color: f.heading }}>
-            Connect with us
-          </p>
+        {/* SOCIAL (DESKTOP) */}
+        <div className="hidden lg:flex flex-col text-2xl saira-stencil-one">
+          <span style={{ color: f.heading }}>Connect with us</span>
           <div
-            className="flex justify-evenly items-center p-2 rounded-full w-[55%]"
+            className="flex justify-evenly items-center p-2 rounded-full my-1 text-xl"
             style={{ background: f.social.bg, color: f.social.icon }}
           >
-            <a href="#" aria-label="Facebook"><FaFacebookSquare /></a>
-            <a href="#" aria-label="YouTube"><IoLogoYoutube /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="LinkedIn"><IoLogoLinkedin /></a>
-            <a href="#" aria-label="X"><FaSquareXTwitter /></a>
+            <FaFacebookSquare />
+            <IoLogoYoutube />
+            <FaInstagram />
+            <IoLogoLinkedin />
+            <FaSquareXTwitter />
           </div>
         </div>
       </div>
 
-      {/* MOBILE SOCIAL */}
-      <div className="lg:hidden mb-4">
-        <p className="font-bold text-lg text-center mb-1" style={{ color: f.heading }}>
+      {/* SOCIAL (MOBILE) */}
+      <div className="lg:hidden text-center mb-5">
+        <span className="text-xl saira-stencil-one" style={{ color: f.heading }}>
           Connect with us
-        </p>
+        </span>
         <div
-          className="flex justify-evenly items-center p-2 rounded-full mx-auto w-[70%]"
+          className="flex justify-center gap-3 rounded-full p-2 mt-1"
           style={{ background: f.social.bg, color: f.social.icon }}
         >
           <FaFacebookSquare />
@@ -173,7 +223,7 @@ const Footer = ({ theme }) => {
 
       {/* COPYRIGHT */}
       <div
-        className="p-3 text-sm md:text-lg flex justify-center items-center gap-2 w-full"
+        className="p-3 text-xs sm:text-sm md:text-md lg:text-lg flex justify-center items-center gap-2 w-full saira-stencil-one"
         style={{ background: f.copyrightBg, color: f.text }}
       >
         <span>Copyright</span>

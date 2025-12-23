@@ -24,7 +24,7 @@ function HomePage({ service }) {
 
   return (
     <div
-      className="min-h-screen w-full overflow-x-hidden"
+      className=" w-full overflow-x-hidden"
       style={{
         background: t.background,
         color: t.text,

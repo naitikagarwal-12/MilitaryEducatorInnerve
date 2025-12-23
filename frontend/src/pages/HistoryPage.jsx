@@ -1,5 +1,9 @@
 import { HISTORY_SERVICES } from "../config/historyServices";
 
+/* ---------- HELPER: GENERATE STABLE SECTION IDS ---------- */
+const makeId = (text) =>
+  text.toLowerCase().replace(/[^\w]+/g, "-");
+
 function HistoryPage({ service }) {
   const config = HISTORY_SERVICES?.[service];
 
@@ -11,10 +15,11 @@ function HistoryPage({ service }) {
 
   return (
     <section
-      className="min-h-screen w-full overflow-x-hidden"
+      className="w-full overflow-x-hidden"
       style={{
         background: history.background,
-        fontFamily: theme.common.font
+        fontFamily: theme.common.font,
+        scrollBehavior: "smooth",
       }}
     >
       {/* PAGE TITLE */}
@@ -26,7 +31,7 @@ function HistoryPage({ service }) {
         History
       </h1>
 
-      {/* BAR — MOBILE SCROLLABLE */}
+      {/* TOP BAR — SECTION LINKS */}
       <div
         className="mt-8 sm:mt-10 flex justify-center overflow-x-auto"
         style={{ background: history.bar.background }}
@@ -34,16 +39,17 @@ function HistoryPage({ service }) {
         <div className="flex">
           {data.map((item, index) => (
             <a
-              key={item.id}
-              href={`#${item.id}`}
+              key={item.title}
+              href={`#${makeId(item.title)}`}
               className="px-6 sm:px-8 py-3
-                         text-sm font-semibold whitespace-nowrap saira-extra-condensed"
+                         text-sm font-semibold whitespace-nowrap
+                         saira-extra-condensed hover:opacity-80"
               style={{
                 color: history.bar.text,
                 borderLeft:
                   index === 0
                     ? "none"
-                    : `3px solid ${history.background}`
+                    : `3px solid ${history.background}`,
               }}
             >
               {item.title}
@@ -57,8 +63,8 @@ function HistoryPage({ service }) {
       <div className="max-w-7xl mx-auto mt-16 px-4 sm:px-6 lg:px-10 pb-20">
         {data.map((item, index) => (
           <div
-            key={item.id}
-            id={item.id}
+            key={item.title}
+            id={makeId(item.title)}
             className="scroll-mt-24 sm:scroll-mt-32"
           >
             <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-center">
@@ -66,7 +72,8 @@ function HistoryPage({ service }) {
               <div className="md:w-2/3 w-full">
                 <h2
                   className="font-bold
-                             text-xl sm:text-2xl lg:text-3xl saira-extra-condensed"
+                             text-xl sm:text-2xl lg:text-3xl
+                             saira-extra-condensed"
                   style={{ color: history.section.heading }}
                 >
                   {item.title}
@@ -76,7 +83,8 @@ function HistoryPage({ service }) {
                 </h2>
 
                 <p
-                  className="mt-4 text-sm sm:text-base leading-relaxed saira-condensed"
+                  className="mt-4 text-sm sm:text-base leading-relaxed
+                             saira-condensed"
                   style={{ color: history.section.text }}
                 >
                   {item.text}
