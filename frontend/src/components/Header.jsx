@@ -16,22 +16,6 @@ const Header = () => {
   const { isAuthenticated, logout } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const handleScroll = (item) => {
-    setActiveItem(item.id);
-    requestAnimationFrame(() => {
-      if (!lenis) return;
-
-      const section = document.getElementById(item.target);
-      if (!section) return;
-
-      lenis.scrollTo(section, {
-        offset: -50,
-        duration: 1.2,
-        immediate: false,
-      });
-    });
-  };
-
   return (
     <>
       <div className="flex justify-center items-center">
@@ -39,7 +23,7 @@ const Header = () => {
           <div className="p-2 flex justify-center items-center md:gap-3 gap-1">
             <img src={logo} alt="Logo" className="h-13 sm:h-16 w-auto" />
             <a
-              href="#"
+              href="/"
               className="text-lg sm:text-xl md:text-2xl saira-stencil-one"
             >
               <p className="text-[#b0be64]">Military</p>
