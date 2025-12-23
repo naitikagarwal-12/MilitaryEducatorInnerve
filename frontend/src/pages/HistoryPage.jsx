@@ -1,17 +1,29 @@
 import { HISTORY_SERVICES } from "../config/historyServices";
+import lenis from "../lenis";
 
 /* ---------- HELPER: GENERATE STABLE SECTION IDS ---------- */
-const makeId = (text) =>
-  text.toLowerCase().replace(/[^\w]+/g, "-");
+const makeId = (text) => text.toLowerCase().replace(/[^\w]+/g, "-");
 
 function HistoryPage({ service }) {
   const config = HISTORY_SERVICES?.[service];
 
-  // SAFETY GUARD
   if (!config) return null;
 
   const { data, theme } = config;
   const history = theme.history;
+
+  const scrollToSection = (targetId) => {
+    requestAnimationFrame(() => {
+      const section = document.getElementById(targetId);
+      if (!section || !lenis) return;
+
+      lenis.scrollTo(section, {
+        offset: -50,
+        duration: 1.2,
+        immediate: false,
+      });
+    });
+  };
 
   return (
     <section
@@ -38,23 +50,21 @@ function HistoryPage({ service }) {
       >
         <div className="flex">
           {data.map((item, index) => (
-            <a
+            <button
               key={item.title}
-              href={`#${makeId(item.title)}`}
+              onClick={() => scrollToSection(makeId(item.title))}
               className="px-6 sm:px-8 py-3
                          text-sm font-semibold whitespace-nowrap
                          saira-extra-condensed hover:opacity-80"
               style={{
                 color: history.bar.text,
                 borderLeft:
-                  index === 0
-                    ? "none"
-                    : `3px solid ${history.background}`,
+                  index === 0 ? "none" : `3px solid ${history.background}`,
               }}
             >
               {item.title}
               {item.year && ` (${item.year})`}
-            </a>
+            </button>
           ))}
         </div>
       </div>
@@ -62,7 +72,7 @@ function HistoryPage({ service }) {
       {/* SECTIONS */}
       <div className="max-w-7xl mx-auto mt-16 px-4 sm:px-6 lg:px-10 pb-20">
         {data.map((item, index) => (
-          <div
+          <section
             key={item.title}
             id={makeId(item.title)}
             className="scroll-mt-24 sm:scroll-mt-32"
@@ -108,7 +118,7 @@ function HistoryPage({ service }) {
                 style={{ background: history.bar.background }}
               />
             )}
-          </div>
+          </section>
         ))}
       </div>
     </section>
