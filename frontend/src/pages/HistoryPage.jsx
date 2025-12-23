@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { HISTORY_SERVICES } from "../config/historyServices";
+import Lenis from "@studio-freight/lenis";
 
 /* ---------- HELPER: GENERATE STABLE SECTION IDS ---------- */
 const makeId = (text) =>
@@ -13,13 +15,31 @@ function HistoryPage({ service }) {
   const { data, theme } = config;
   const history = theme.history;
 
+  /* ---------- LENIS SETUP ---------- */
+  useEffect(() => {
+    const lenis = new Lenis({
+      smooth: true,
+      lerp: 0.08,
+      wheelMultiplier: 1,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   return (
     <section
       className="w-full overflow-x-hidden"
       style={{
         background: history.background,
         fontFamily: theme.common.font,
-        scrollBehavior: "smooth",
       }}
     >
       {/* PAGE TITLE */}

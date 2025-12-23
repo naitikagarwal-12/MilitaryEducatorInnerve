@@ -31,17 +31,17 @@ const Footer = ({ theme }) => {
   ];
 
   const defense = [
-    { title: "Indian Army (IA)", link: "/army" },
-    { title: "Indian Navy (IN)", link: "/navy" },
-    { title: "Indian Air Force (IAF)", link: "/air-force" },
+    { title: "Indian Army, (IA)", link: "/army" },
+    { title: "Indian Navy, (IN)", link: "/navy" },
+    { title: "Indian Air Force, (IAF)", link: "/air-force" },
   ];
 
   return (
     <footer
-      className="flex flex-col justify-center items-center w-full saira-condensed"
+      className="flex flex-col justify-center items-center w-full"
       style={{ background: f.background }}
     >
-      {/* TOP BAR */}
+      {/* TOP */}
       <div className="md:flex justify-between items-center p-2 w-full md:max-w-[85%]">
         <div className="ml-5 py-5 flex items-center gap-2 saira-stencil-one">
           <img src={logo} alt="Logo" className="h-16 lg:h-20 w-auto" />
@@ -59,9 +59,8 @@ const Footer = ({ theme }) => {
         </p>
       </div>
 
-      {/* MAIN GRID */}
+      {/* GRID */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-2 w-full py-5 lg:mb-5 place-items-center px-6">
-
         {/* LEFT */}
         <div className="flex flex-col items-center md:items-start gap-5 saira-stencil-one">
           <Link to="/" className="text-2xl hover:scale-105 transition-all" style={{ color: f.text }}>
@@ -80,26 +79,14 @@ const Footer = ({ theme }) => {
               style={{ color: f.text }}
             >
               <span>Our Services</span>
-              <IoMdArrowDropdown
-                className={`md:hidden transition-all ${
-                  active === "services" ? "rotate-180" : ""
-                }`}
-              />
+              <IoMdArrowDropdown className={`md:hidden ${active === "services" ? "rotate-180" : ""}`} />
             </div>
 
-            <ul
-              className={`space-y-1 mt-1 font-semibold
-              ${active === "services" ? "block" : "hidden"}
-              md:block`}
-            >
+            <ul className={`${active === "services" ? "block" : "hidden"} md:block space-y-1 mt-1 saira-condensed font-semibold`}>
               {services.map((s) => (
                 <li key={s.title}>
-                  <Link
-                    to={s.link}
-                    className="flex items-center gap-2 hover:underline"
-                    style={{ color: f.text }}
-                  >
-                    <FaArrowRightLong color={f.arrow} className="hidden md:block" />
+                  <Link to={s.link} className="flex items-center gap-2 hover:underline" style={{ color: f.text }}>
+                    <FaArrowRightLong className="hidden md:block" color={f.arrow} />
                     {s.title}
                   </Link>
                 </li>
@@ -118,26 +105,14 @@ const Footer = ({ theme }) => {
               style={{ color: f.text }}
             >
               <span>Defense System</span>
-              <IoMdArrowDropdown
-                className={`md:hidden transition-all ${
-                  active === "defense" ? "rotate-180" : ""
-                }`}
-              />
+              <IoMdArrowDropdown className={`md:hidden ${active === "defense" ? "rotate-180" : ""}`} />
             </div>
 
-            <ul
-              className={`space-y-1 mt-1 font-semibold
-              ${active === "defense" ? "block" : "hidden"}
-              md:block`}
-            >
+            <ul className={`${active === "defense" ? "block" : "hidden"} md:block space-y-1 mt-1 saira-condensed font-semibold`}>
               {defense.map((d) => (
                 <li key={d.title}>
-                  <Link
-                    to={d.link}
-                    className="flex items-center gap-2 hover:underline"
-                    style={{ color: f.text }}
-                  >
-                    <FaArrowRightLong color={f.arrow} className="hidden md:block" />
+                  <Link to={d.link} className="flex items-center gap-2 hover:underline" style={{ color: f.text }}>
+                    <FaArrowRightLong className="hidden md:block" color={f.arrow} />
                     {d.title}
                   </Link>
                 </li>
@@ -153,19 +128,10 @@ const Footer = ({ theme }) => {
               style={{ color: f.text }}
             >
               <span>Contact Us</span>
-              <IoMdArrowDropdown
-                className={`md:hidden transition-all ${
-                  active === "contact" ? "rotate-180" : ""
-                }`}
-              />
+              <IoMdArrowDropdown className={`md:hidden ${active === "contact" ? "rotate-180" : ""}`} />
             </div>
 
-            <ul
-              className={`space-y-1 font-semibold
-              ${active === "contact" ? "block" : "hidden"}
-              md:block`}
-              style={{ color: f.text }}
-            >
+            <ul className={`${active === "contact" ? "block" : "hidden"} md:block space-y-1 saira-condensed font-semibold`} style={{ color: f.text }}>
               <li className="flex items-center gap-2">
                 <span className="rounded-full p-1 text-[10px]" style={{ background: f.icon.bg, color: f.icon.text }}>
                   <BsFillTelephoneFill />
@@ -188,13 +154,10 @@ const Footer = ({ theme }) => {
           </div>
         </div>
 
-        {/* SOCIAL (DESKTOP) */}
+        {/* SOCIAL DESKTOP */}
         <div className="hidden lg:flex flex-col text-2xl saira-stencil-one">
           <span style={{ color: f.heading }}>Connect with us</span>
-          <div
-            className="flex justify-evenly items-center p-2 rounded-full my-1 text-xl"
-            style={{ background: f.social.bg, color: f.social.icon }}
-          >
+          <div className="flex justify-evenly items-center p-2 rounded-full my-1 text-xl" style={{ background: f.social.bg, color: f.social.icon }}>
             <FaFacebookSquare />
             <IoLogoYoutube />
             <FaInstagram />
@@ -204,15 +167,12 @@ const Footer = ({ theme }) => {
         </div>
       </div>
 
-      {/* SOCIAL (MOBILE) */}
+      {/* SOCIAL MOBILE */}
       <div className="lg:hidden text-center mb-5">
         <span className="text-xl saira-stencil-one" style={{ color: f.heading }}>
           Connect with us
         </span>
-        <div
-          className="flex justify-center gap-3 rounded-full p-2 mt-1"
-          style={{ background: f.social.bg, color: f.social.icon }}
-        >
+        <div className="flex justify-center gap-3 rounded-full p-2 mt-1" style={{ background: f.social.bg, color: f.social.icon }}>
           <FaFacebookSquare />
           <IoLogoYoutube />
           <FaInstagram />
