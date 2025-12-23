@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mock Interview | Military Educator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
 <body>
 
@@ -52,7 +53,10 @@
 </div>
 
 <script>
-    var questions = {{ questions|tojson }};
+    // Note: This logic assumes 'questions' is rendered by the server (Flask/Jinja)
+    // If testing locally without a server, replace {{ questions|tojson }} with: ["What is your leadership style?", "Describe a challenge you faced."]
+    var questions = {{ questions|tojson }}; 
+    
     var currentIdx = 0;
     var responses = [];
     var reportData = null;
