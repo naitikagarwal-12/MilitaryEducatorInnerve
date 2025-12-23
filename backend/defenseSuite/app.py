@@ -12,7 +12,7 @@ app = Flask(
 CORS(app)  
 
 # Generate a secret key for session security
-app.secret_key = secrets.token_hex(16)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-key")
 
 # --- 1. DATABASES ---
 OIR_DB = [
