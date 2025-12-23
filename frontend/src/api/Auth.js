@@ -8,9 +8,9 @@ export const registerUser = async (data) => {
     body: JSON.stringify(data),
   });
 
-  const result = await res.json();
-  if (!res.ok) throw new Error(result.message || "Registration failed");
-  return result;
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message);
+  return json;
 };
 
 export const loginUser = async (data) => {
@@ -21,9 +21,9 @@ export const loginUser = async (data) => {
     body: JSON.stringify(data),
   });
 
-  const result = await res.json();
-  if (!res.ok) throw new Error(result.message || "Login failed");
-  return result;
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message);
+  return json;
 };
 
 export const logoutUser = async () => {
@@ -37,6 +37,5 @@ export const getMe = async () => {
   const res = await fetch(`${BASE_URL}/api/auth/me`, {
     credentials: "include",
   });
-
   return res.json();
 };

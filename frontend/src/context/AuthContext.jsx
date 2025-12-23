@@ -5,30 +5,37 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    (async () => {
       try {
         const res = await getMe();
-        setIsAuthenticated(res.isAuthenticated);
-      } catch {
-        setIsAuthenticated(false);
+        if (res.isAuthenticated) {
+          setIsAuthenticated(true);
+          setUser(res.user);
+        }
       } finally {
         setLoading(false);
       }
-    };
-
-    checkAuth();
+    })();
   }, []);
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  const login = (user) => {
+    setIsAuthenticated(true);
+    setUser(user);
+  };
 
-  if (loading) return null; // or loader
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
+  if (loading) return null;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

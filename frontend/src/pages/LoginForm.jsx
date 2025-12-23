@@ -13,15 +13,20 @@ const LoginForm = ({ switchToSignup, onSuccess }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
     try {
-      await loginUser({ email, password });
-      login();
+      const res = await loginUser({ email, password });
+      login(res.user); // context update
       onSuccess();
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
