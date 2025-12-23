@@ -1,7 +1,7 @@
-const BASE_URL = `${import.meta.env.VITE_USER_API}`
+const BASE_URL = import.meta.env.VITE_USER_API;
 
 export const registerUser = async (data) => {
-  const res = await fetch(`${BASE_URL}/register`, {
+  const res = await fetch(`${BASE_URL}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -9,12 +9,12 @@ export const registerUser = async (data) => {
   });
 
   const result = await res.json();
-  if (!res.ok) throw new Error(result.message);
+  if (!res.ok) throw new Error(result.message || "Registration failed");
   return result;
 };
 
 export const loginUser = async (data) => {
-  const res = await fetch(`${BASE_URL}/login`, {
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -22,19 +22,19 @@ export const loginUser = async (data) => {
   });
 
   const result = await res.json();
-  if (!res.ok) throw new Error(result.message);
+  if (!res.ok) throw new Error(result.message || "Login failed");
   return result;
 };
 
 export const logoutUser = async () => {
-  await fetch(`${BASE_URL}/logout`, {
+  await fetch(`${BASE_URL}/api/auth/logout`, {
     method: "POST",
     credentials: "include",
   });
 };
 
 export const getMe = async () => {
-  const res = await fetch(`${BASE_URL}/me`, {
+  const res = await fetch(`${BASE_URL}/api/auth/me`, {
     credentials: "include",
   });
 
