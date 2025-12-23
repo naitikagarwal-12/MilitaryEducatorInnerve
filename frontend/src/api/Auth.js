@@ -1,7 +1,5 @@
-const BASE_URL = import.meta.env.VITE_USER_API;
-
 export const registerUser = async (data) => {
-  const res = await fetch(`${BASE_URL}/api/auth/register`, {
+  const res = await fetch("/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -14,7 +12,7 @@ export const registerUser = async (data) => {
 };
 
 export const loginUser = async (data) => {
-  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+  const res = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -27,14 +25,14 @@ export const loginUser = async (data) => {
 };
 
 export const logoutUser = async () => {
-  await fetch(`${BASE_URL}/api/auth/logout`, {
+  await fetch("/api/auth/logout", {
     method: "POST",
     credentials: "include",
   });
 };
 
 export const getMe = async () => {
-  const res = await fetch(`${BASE_URL}/api/auth/me`, {
+  const res = await fetch("/api/auth/me", {
     credentials: "include",
   });
   return res.json();
