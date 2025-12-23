@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import chatbotLogo from "../assets/chatbotLogo.png";
 import { IoClose } from "react-icons/io5";
 import { FaArrowUpLong } from "react-icons/fa6";
-import lenis from "../lenis"; // 👈 import lenis instance
+import lenis from "../lenis";
 
 const ChatbotButton = () => {
   const [botOpen, setBotOpen] = useState(false);
@@ -48,12 +48,11 @@ const ChatbotButton = () => {
         <FaArrowUpLong />
       </button>
 
-      {/* CHATBOT TOGGLE */}
       <button
         onClick={() => setBotOpen((prev) => !prev)}
         className="
           chatTalk fixed bottom-8 lg:bottom-7 right-1 md:right-3
-          z-60 p-0.5 rounded-full
+          z-50 p-0.5 rounded-full
           ring-orange-500 shadow-[0_0_20px_rgba(255,94,0,0.6)]
           bg-orange-700/80 backdrop-blur-xl
           hover:scale-110 transition-all duration-300
@@ -70,13 +69,14 @@ const ChatbotButton = () => {
         )}
       </button>
 
-      {/* CHATBOT MODAL (UNCHANGED) */}
       {botOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/40 z-40 md:hidden"
+            className="fixed inset-0 bg-black/40 z-10 md:hidden"
             onClick={() => setBotOpen(false)}
           />
+
+          <IoClose onClick={() => setBotOpen(false)}  className="absolute top-17 left-5 rounded-xl p-0.5 text-xl font-bold bg-white z-100 hover:bg-white/70 transition-all duration-300 ease-in hover:scale-110 md:hidden" />
 
           <div className="fixed z-80 inset-0 md:inset-auto md:bottom-20 md:right-21 md:h-[80%] md:w-[55%] flex items-center justify-center">
             <div
