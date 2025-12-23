@@ -7,8 +7,16 @@ import "./lenis.js";
 import ContactUs from "./pages/ContactUs.jsx";
 import MockInterview from "./components/MockInterview.jsx";
 import DefenseSuite from "./components/DefenseSuite.jsx";
+import { useState } from "react";
+import BackendLoader from "./components/BackendLoader.jsx";
 
 function App() {
+  const [backendReady, setBackendReady] = useState(false);
+
+  if (!backendReady) {
+    return <BackendLoader onReady={() => setBackendReady(true)} />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
@@ -16,7 +24,10 @@ function App() {
           <Route index element={<HomeLayout />} />
           <Route path="army" element={<ServiceScrollPage service="army" />} />
           <Route path="navy" element={<ServiceScrollPage service="navy" />} />
-          <Route path="air-force" element={<ServiceScrollPage service="airforce" />} />
+          <Route
+            path="air-force"
+            element={<ServiceScrollPage service="airforce" />}
+          />
           <Route path="mock" element={<MockInterview />} />
           <Route path="defense" element={<DefenseSuite />} />
           <Route path="contact" element={<ContactUs />} />
