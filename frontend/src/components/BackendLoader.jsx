@@ -2,10 +2,6 @@ import { useEffect, useState } from "react";
 
 const BACKENDS = [
   {
-    name: "User Management",
-    url: "https://user-management-dfbx.onrender.com",
-  },
-  {
     name: "Defense Suite",
     url: "https://defense-suite.onrender.com",
   },
