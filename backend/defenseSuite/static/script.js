@@ -1,51 +1,122 @@
-let timer;
+let timerInterval;
+let currentQuestions = [];
+let userAnswers = [];
 
-// --- 1. VERIFY ELIGIBILITY ---
-function verifyElig() {
-    const age = document.getElementById('age').value;
-    const edu = document.getElementById('edu').value;
-    const gender = document.getElementById('gender').value;
-    const msgBox = document.getElementById('elig-msg');
-    const pathArea = document.getElementById('pathways-area');
-    const pathGrid = document.getElementById('path-grid');
-
-    // Clear previous
-    msgBox.innerText = "";
-    pathArea.style.display = 'none';
-    pathGrid.innerHTML = '';
-
-    if (!age) {
-        msgBox.innerText = "Error: Please enter a valid age.";
-        return;
-    }
-
-    fetch('/api/eligibility', {
+// --- CORE FUNCTIONS ---
+function startTest(type) {
+    userAnswers = [];
+    fetch('/api/get_test', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({age: age, edu: edu, gender: gender})
+        body: JSON.stringify({type: type})
     })
     .then(r => r.json())
     .then(data => {
-        if (data.exams.length === 0) {
-            // RED TEXT ERROR (No Alert)
-            msgBox.innerText = "NO MATCH FOUND WITH THESE CRITERIA.";
-        } else {
-            // SUCCESS
-            pathArea.style.display = 'block';
-            data.exams.forEach(exam => {
-                const div = document.createElement('div');
-                div.className = 'path-card';
-                div.innerHTML = `<div>${exam}</div><div style="font-size:0.7rem; margin-top:5px; color:#555;">CLICK FOR DETAILS</div>`;
-                div.onclick = () => showDetails(exam);
-                pathGrid.appendChild(div);
-            });
-            // Scroll to pathways
-            pathArea.scrollIntoView({behavior: 'smooth'});
+        openModal(type + " TEST");
+        currentQuestions = data.data;
+        
+        if (data.mode === 'quiz') {
+            renderOIR(data.data);
+            startTimer(data.time, submitOIR);
+        } else if (data.mode === 'slide') {
+            renderWAT(data.data, 0, data.time);
+        } else if (data.mode === 'input_list') {
+            renderSRT(data.data);
+            startTimer(data.time, submitSRT);
         }
     });
 }
 
-// --- 2. SHOW MANUALS ---
+// --- RENDERERS ---
+function renderOIR(qs) {
+    let html = '';
+    qs.forEach((q, i) => {
+        html += `<div style="background:white; padding:10px; margin-bottom:10px; border:1px solid #ccc;">
+            <strong>Q${i+1}: ${q.q}</strong><br>
+            ${q.options.map(o => `<label style="margin-right:10px;"><input type="radio" name="q${i}" value="${o}"> ${o}</label>`).join('')}
+        </div>`;
+    });
+    html += '<button class="btn-block" onclick="submitOIR()">SUBMIT OIR</button>';
+    document.getElementById('m-content').innerHTML = html;
+}
+
+function renderSRT(qs) {
+    let html = '';
+    qs.forEach((q, i) => {
+        html += `<div style="margin-bottom:15px;">
+            <strong>Situation ${i+1}:</strong> ${q}<br>
+            <input type="text" id="srt-${i}" style="width:100%; padding:8px; margin-top:5px;" placeholder="Your reaction...">
+        </div>`;
+    });
+    html += '<button class="btn-block" onclick="submitSRT()">SUBMIT SRT</button>';
+    document.getElementById('m-content').innerHTML = html;
+}
+
+function renderWAT(words, idx, time) {
+    if(idx >= words.length) { submitWAT(); return; }
+    
+    document.getElementById('m-content').innerHTML = `
+        <div style="text-align:center; margin-top:40px;">
+            <h1 style="font-size:3rem; margin-bottom:20px;">${words[idx]}</h1>
+            <input type="text" id="wat-input" style="font-size:1.2rem; padding:10px; width:70%;" autofocus>
+            <p style="color:red; font-weight:bold;">Next in: <span id="w-timer">${time}</span>s</p>
+        </div>`;
+    
+    document.getElementById('wat-input').focus();
+    
+    let t = time;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        t--;
+        document.getElementById('w-timer').innerText = t;
+        if(t<=0) saveWatAndNext(words, idx, time);
+    }, 1000);
+
+    document.getElementById('wat-input').onkeydown = (e) => {
+        if(e.key === 'Enter') saveWatAndNext(words, idx, time);
+    };
+}
+
+function saveWatAndNext(words, idx, time) {
+    let val = document.getElementById('wat-input').value;
+    userAnswers.push(val || "NO RESPONSE");
+    renderWAT(words, idx+1, time);
+}
+
+// --- SUBMIT ---
+function submitOIR() {
+    userAnswers = [];
+    currentQuestions.forEach((q, i) => {
+        let el = document.querySelector(`input[name="q${i}"]:checked`);
+        userAnswers.push(el ? el.value : "");
+    });
+    sendData('OIR');
+}
+
+function submitSRT() {
+    userAnswers = [];
+    currentQuestions.forEach((q, i) => {
+        userAnswers.push(document.getElementById(`srt-${i}`).value);
+    });
+    sendData('SRT');
+}
+
+function submitWAT() { sendData('WAT'); }
+
+function sendData(type) {
+    clearInterval(timerInterval);
+    fetch('/api/submit_test', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({type: type, answers: userAnswers})
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('m-content').innerHTML = `<div style="text-align:center; padding:30px;"><h2>${data.msg}</h2></div>`;
+    });
+}
+
+// --- REPORT & MANUALS ---
 function openManual(branch) {
     fetch('/api/get_manual', {
         method: 'POST',
@@ -54,108 +125,65 @@ function openManual(branch) {
     })
     .then(r => r.json())
     .then(data => {
-        openModal(branch + " PROTOCOLS");
-        document.getElementById('m-content').innerHTML = data.content;
+        openModal(branch + " INFO");
+        document.getElementById('m-content').innerHTML = `<div style="padding:15px; font-size:1.1rem; line-height:1.6;">${data.content}</div>`;
     });
 }
 
-// --- 3. SHOW EXAM DETAILS ---
-function showDetails(exam) {
-    fetch('/api/get_details', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({exam: exam})
-    })
+function generateReport() {
+    fetch('/api/generate_report')
     .then(r => r.json())
     .then(data => {
-        openModal(data.title);
-        let html = `<p class="manual-section"><strong>${data.desc}</strong></p>
-        <table style="width:100%; border-collapse:collapse; margin-top:20px;">
-            <tr style="background:#ccc;"><th style="padding:10px; text-align:left;">PAPER</th><th>DURATION</th><th>QS</th><th>MARKS</th></tr>`;
-        
-        data.papers.forEach(p => {
-            html += `<tr style="border-bottom:1px solid #ddd;">
-                <td style="padding:10px;">${p.subject}</td>
-                <td style="text-align:center;">${p.duration}</td>
-                <td style="text-align:center;">${p.qs}</td>
-                <td style="text-align:center;">${p.marks}</td>
-            </tr>`;
-        });
-        html += `</table>`;
-        document.getElementById('m-content').innerHTML = html;
-    });
-}
-
-// --- 4. TESTS ---
-function loadTest(type) {
-    fetch('/api/get_test', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({type: type})
-    })
-    .then(r => r.json())
-    .then(data => {
-        openModal(type + " SIMULATION");
-        const div = document.getElementById('m-content');
-        
-        if(data.mode === 'list') {
-            // OIR & SRT
-            let html = "";
-            data.data.forEach(item => {
-                if(type === 'OIR') {
-                    html += `<div style="background:white; padding:15px; margin-bottom:10px; border:1px solid #ccc;">
-                        <strong>${item.q}</strong><br>
-                        ${item.options.map(o => `<button style="margin:5px; padding:5px 10px;">${o}</button>`).join('')}
-                    </div>`;
-                } else {
-                    html += `<div style="margin-bottom:15px;"><strong>${item}</strong><br><input type="text" style="width:100%; padding:10px; border:1px solid #999;" placeholder="Reaction..."></div>`;
-                }
-            });
-            div.innerHTML = html;
-            runTimer(data.time);
-        } else {
-            // WAT
-            runWAT(data.data, 0);
+        if(data.status === 'error') {
+            alert(data.msg);
+            return;
         }
-    });
-}
 
-function runWAT(words, idx) {
-    if(idx >= words.length) {
-        document.getElementById('m-content').innerHTML = "<h2>TEST COMPLETE</h2>";
-        return;
-    }
-    document.getElementById('m-content').innerHTML = `<div style="text-align:center; padding-top:100px;">
-        <h1 style="font-size:4rem; color:#2F3820;">${words[idx]}</h1>
-        <input type="text" placeholder="Type..." style="font-size:1.5rem; padding:10px; width:60%;">
-    </div>`;
-    runTimer(15, () => runWAT(words, idx+1));
+        const panel = document.getElementById('final-report-panel');
+        panel.style.display = 'block';
+        let html = '';
+
+        if(data.oir) {
+            html += `<h3>OIR RESULT</h3><p>Score: ${data.oir.score}/5 (Rating: OIR-${data.oir.rating})</p><hr>`;
+        }
+        
+        if(data.wat) {
+            html += `<h3>WAT ANALYSIS</h3><table><tr><th>Word</th><th>Response</th><th>OLQ</th></tr>`;
+            data.wat.forEach(row => {
+                html += `<tr><td>${row.word}</td><td>${row.response}</td><td><b>${row.qualities.join(', ')}</b></td></tr>`;
+            });
+            html += `</table><hr>`;
+        }
+
+        if(data.srt) {
+            html += `<h3>SRT ANALYSIS</h3><table><tr><th>Situation</th><th>Response</th><th>OLQ</th></tr>`;
+            data.srt.forEach(row => {
+                html += `<tr><td>${row.situation.substring(0,20)}...</td><td>${row.response}</td><td><b>${row.qualities.join(', ')}</b></td></tr>`;
+            });
+            html += `</table>`;
+        }
+
+        document.getElementById('report-content').innerHTML = html;
+        panel.scrollIntoView({behavior: "smooth"});
+    });
 }
 
 // --- UTILS ---
-function runTimer(sec, cb) {
-    clearInterval(timer);
-    let t = sec;
-    const el = document.getElementById('m-timer');
-    el.innerText = t + "s";
-    timer = setInterval(() => {
-        t--;
-        el.innerText = t + "s";
-        if(t <= 0) {
-            clearInterval(timer);
-            if(cb) cb();
-        }
-    }, 1000);
-}
-
 function openModal(title) {
-    document.getElementById('mainModal').style.display = 'block';
+    document.getElementById('mainModal').style.display = 'flex';
     document.getElementById('m-title').innerText = title;
-    document.getElementById('m-timer').innerText = "";
-    clearInterval(timer);
 }
-
 function closeModal() {
     document.getElementById('mainModal').style.display = 'none';
-    clearInterval(timer);
+    clearInterval(timerInterval);
+}
+function startTimer(sec, cb) {
+    clearInterval(timerInterval);
+    let t = sec;
+    document.getElementById('m-timer').innerText = t + "s";
+    timerInterval = setInterval(() => {
+        t--;
+        document.getElementById('m-timer').innerText = t + "s";
+        if(t <= 0) { clearInterval(timerInterval); if(cb) cb(); }
+    }, 1000);
 }
