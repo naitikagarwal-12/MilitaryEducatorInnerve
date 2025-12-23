@@ -6,7 +6,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthModal from "../pages/AuthModal";
-import lenis from "../lenis";
+
+const APK_URL =
+  "https://github.com/naitikagarwal-12/MilitaryEducatorInnerve/releases/download/AR/app-release.apk";
 
 const Header = ({ theme }) => {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -18,17 +20,8 @@ const Header = ({ theme }) => {
   if (!theme || !theme.header) return null;
   const h = theme.header;
 
-  const scrollToSection = (targetId) => {
-    requestAnimationFrame(() => {
-      const section = document.getElementById(targetId);
-      if (!section || !lenis) return;
-
-      lenis.scrollTo(section, {
-        offset: -50,
-        duration: 1.2,
-        immediate: false,
-      });
-    });
+  const downloadAPK = () => {
+    window.location.href = APK_URL;
   };
 
   return (
@@ -45,9 +38,9 @@ const Header = ({ theme }) => {
             </div>
           </div>
 
-          {/* AR/VR BAR */}
+          {/* AR/VR DOWNLOAD BAR */}
           <div
-            onClick={() => scrollToSection("model")}
+            onClick={downloadAPK}
             className="hidden lg:flex rounded-3xl border-2 max-w-90 items-center
                        saira-stencil-one cursor-pointer transition hover:scale-[1.02]"
             style={{
@@ -67,7 +60,7 @@ const Header = ({ theme }) => {
             </div>
 
             <div className="flex justify-center items-center px-3">
-              <p style={{ color: h.buttons.download.text }}>Explore</p>
+              <p style={{ color: h.buttons.download.text }}>Download</p>
               <MdOutlineFileDownload
                 className="text-2xl"
                 style={{ color: h.buttons.download.icon }}
