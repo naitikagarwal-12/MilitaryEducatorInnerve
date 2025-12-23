@@ -11,20 +11,14 @@ dotenv.config();
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://military-educator-innerve.vercel.app",
-];
-
 app.use(
   cors({
-    origin: (origin, cb) => {
-      if (!origin || allowedOrigins.includes(origin)) cb(null, true);
-      else cb(new Error("CORS blocked"));
-    },
+    origin: "https://military-educator-innerve.vercel.app",
     credentials: true,
   })
 );
