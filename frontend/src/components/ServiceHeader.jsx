@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthModal from "../pages/AuthModal";
+import lenis from "../lenis";
 
 const Header = ({ theme }) => {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -16,6 +17,19 @@ const Header = ({ theme }) => {
 
   if (!theme || !theme.header) return null;
   const h = theme.header;
+
+  const scrollToSection = (targetId) => {
+    requestAnimationFrame(() => {
+      const section = document.getElementById(targetId);
+      if (!section || !lenis) return;
+
+      lenis.scrollTo(section, {
+        offset: -50,
+        duration: 1.2,
+        immediate: false,
+      });
+    });
+  };
 
   return (
     <>
@@ -33,7 +47,9 @@ const Header = ({ theme }) => {
 
           {/* AR/VR BAR */}
           <div
-            className="hidden lg:flex rounded-3xl border-2 max-w-90 items-center saira-stencil-one"
+            onClick={() => scrollToSection("model")}
+            className="hidden lg:flex rounded-3xl border-2 max-w-90 items-center
+                       saira-stencil-one cursor-pointer transition hover:scale-[1.02]"
             style={{
               background: "#d9d9d9",
               borderColor: h.buttons.arvr.border
@@ -51,7 +67,7 @@ const Header = ({ theme }) => {
             </div>
 
             <div className="flex justify-center items-center px-3">
-              <p style={{ color: h.buttons.download.text }}>Download</p>
+              <p style={{ color: h.buttons.download.text }}>Explore</p>
               <MdOutlineFileDownload
                 className="text-2xl"
                 style={{ color: h.buttons.download.icon }}
@@ -65,7 +81,8 @@ const Header = ({ theme }) => {
             {/* CONTACT */}
             <button
               onClick={() => navigate("/contact")}
-              className="flex items-center gap-1 border rounded-lg sm:rounded-xl py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
+              className="flex items-center gap-1 border rounded-lg sm:rounded-xl
+                         py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
               style={{
                 background: h.buttons.contact.bg,
                 color: h.buttons.contact.text,
@@ -80,7 +97,8 @@ const Header = ({ theme }) => {
             {!isAuthenticated ? (
               <button
                 onClick={() => setLoginOpen(true)}
-                className="flex items-center gap-1 border rounded-lg sm:rounded-xl py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
+                className="flex items-center gap-1 border rounded-lg sm:rounded-xl
+                           py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
                 style={{
                   background: h.buttons.login.bg,
                   color: h.buttons.login.text,
@@ -94,7 +112,8 @@ const Header = ({ theme }) => {
               <div className="relative">
                 <button
                   onClick={() => setProfileOpen((p) => !p)}
-                  className="flex items-center gap-1 border rounded-lg sm:rounded-xl py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
+                  className="flex items-center gap-1 border rounded-lg sm:rounded-xl
+                             py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
                   style={{
                     background: h.buttons.login.bg,
                     color: h.buttons.login.text,
@@ -136,7 +155,8 @@ const Header = ({ theme }) => {
 
       {/* DIVIDER */}
       <hr
-        className="w-[90%] md:w-[80%] lg:w-[85%] xl:w-[80%] mx-auto border-t-3 rounded-full"
+        className="w-[90%] md:w-[80%] lg:w-[85%] xl:w-[80%]
+                   mx-auto border-t-3 rounded-full"
         style={{ borderColor: h.divider }}
       />
 
