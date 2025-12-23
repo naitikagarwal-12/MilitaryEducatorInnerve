@@ -3,12 +3,11 @@ import { FaUser } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { useState } from "react";
-import ContactUs from "../pages/ContactUs";
-import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 function Header({ theme }) {
   const [loginOpen, setLoginOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
+  const navigate = useNavigate();
 
   const h = theme.header;
 
@@ -16,7 +15,7 @@ function Header({ theme }) {
     <>
       <div className="flex justify-center items-center">
         <div className="grid grid-cols-2 lg:grid-cols-3 items-center w-full">
-
+          
           {/* LOGO + BRAND */}
           <div className="p-2 flex justify-center items-center md:gap-3 gap-1">
             <img src={logo} alt="Logo" className="h-13 sm:h-16 w-auto" />
@@ -24,6 +23,7 @@ function Header({ theme }) {
             <a
               href="#"
               className="text-lg sm:text-xl md:text-2xl saira-stencil-one"
+              onClick={(e) => e.preventDefault()}
             >
               <p style={{ color: h.brand.military }}>Military</p>
               <p style={{ color: h.brand.educator }}>Educator</p>
@@ -38,7 +38,6 @@ function Header({ theme }) {
               borderColor: h.buttons.arvr.border
             }}
           >
-            {/* AR/VR */}
             <div
               className="rounded-3xl py-2 px-5 border-2"
               style={{
@@ -50,7 +49,6 @@ function Header({ theme }) {
               <p>Experience on AR/VR</p>
             </div>
 
-            {/* DOWNLOAD */}
             <div className="flex gap-1 justify-center items-center px-3">
               <p
                 className="font-bold"
@@ -67,10 +65,10 @@ function Header({ theme }) {
 
           {/* CONTACT + LOGIN */}
           <div className="flex justify-center items-center gap-2 saira-condensed font-extrabold">
-
+            
             {/* CONTACT */}
             <button
-              onClick={() => setContactOpen(true)}
+              onClick={() => navigate("/contact")}
               className="flex items-center gap-1 border rounded-lg sm:rounded-xl py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
               style={{
                 background: h.buttons.contact.bg,
@@ -82,7 +80,19 @@ function Header({ theme }) {
               <span>Contact Us</span>
             </button>
 
-           
+            {/* LOGIN (unchanged, placeholder) */}
+            <button
+              onClick={() => setLoginOpen(true)}
+              className="flex items-center gap-1 border rounded-lg sm:rounded-xl py-2 px-2 sm:py-1.5 sm:px-3 text-xs sm:text-sm lg:text-md"
+              style={{
+                background: h.buttons.login.bg,
+                color: h.buttons.login.text,
+                borderColor: h.buttons.login.border
+              }}
+            >
+              <FaUser />
+              <span>Login</span>
+            </button>
 
           </div>
         </div>
@@ -93,26 +103,6 @@ function Header({ theme }) {
         className="w-[95%] md:w-[80%] lg:w-[85%] xl:w-[80%] mx-auto border-t-3 rounded-full"
         style={{ borderColor: h.divider }}
       />
-
-      {/* CONTACT MODAL */}
-      {contactOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
-          <div className="relative w-[90%] md:w-[85%] lg:w-[75%] h-[75vh] bg-[#0b0f14] ring-2 ring-white/80 rounded-xl flex flex-col">
-            <button
-              className="absolute top-3 right-3 z-10"
-              onClick={() => setContactOpen(false)}
-            >
-              <IoClose className="text-3xl text-[#27395f] bg-gray-50 hover:bg-gray-200 p-1 rounded-full" />
-            </button>
-
-            <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-tactical">
-              <ContactUs />
-            </div>
-          </div>
-        </div>
-      )}
-
-    
     </>
   );
 }
