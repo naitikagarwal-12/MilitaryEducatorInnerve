@@ -1,24 +1,17 @@
 import os
 from flask import Flask, render_template, request, jsonify, session
+from flask_cors import CORS
 
 app = Flask(__name__)
 
-# ===============================
-# SESSION CONFIG (CRITICAL FIX)
-# ===============================
+CORS(app)
 
-# 🔒 Stable secret key (DO NOT auto-generate)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dretgmDefenseSuitekjnhhlkhbmjknetj_NJVNGJBKRSNVhgb")
 
-# ✅ Required for iframe + cross-site
 app.config.update(
     SESSION_COOKIE_SAMESITE="None",
     SESSION_COOKIE_SECURE=True,   # REQUIRED on HTTPS (Render)
 )
-
-# ===============================
-# DATABASES
-# ===============================
 
 OIR_DB = [
     {"id": 1, "q": "Which number comes next: 2, 6, 12, 20, 30, ...?", "options": ["40", "42", "44", "38"], "ans": "42"},
