@@ -1,8 +1,12 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import lenis from "../lenis";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const navItems = [
     { id: 1, title: "Home", target: "home" },
     { id: 2, title: "About Us", target: "about" },
@@ -12,20 +16,28 @@ const Navbar = () => {
 
   const [activeItem, setActiveItem] = useState(1);
 
-  const handleScroll = (item) => {
-    setActiveItem(item.id);
+  const scrollToSection = (targetId) => {
     requestAnimationFrame(() => {
-      if (!lenis) return;
-
-      const section = document.getElementById(item.target);
-      if (!section) return;
+      const section = document.getElementById(targetId);
+      if (!section || !lenis) return;
 
       lenis.scrollTo(section, {
-        offset: -50,       
+        offset: -50,
         duration: 1.2,
         immediate: false,
       });
     });
+  };
+
+  const handleNavClick = (item) => {
+    setActiveItem(item.id);
+
+    // If NOT on home page, navigate first
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: item.target } });
+    } else {
+      scrollToSection(item.target);
+    }
   };
 
   return (
@@ -35,7 +47,7 @@ const Navbar = () => {
       {navItems.map((item) => (
         <button
           key={item.id}
-          onClick={() => handleScroll(item)}
+          onClick={() => handleNavClick(item)}
           className={`text-xs sm:text-sm md:text-lg xl:text-xl ${
             activeItem === item.id ? "text-[#efad04]" : "text-white"
           } hover:text-[#efad04]/90`}
