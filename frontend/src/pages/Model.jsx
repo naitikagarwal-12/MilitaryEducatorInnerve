@@ -3,7 +3,7 @@ import { GiSupersonicBullet } from "react-icons/gi";
 
 const Model = () => {
   const downloadAPK = () => {
-    window.location.href = "/app-release.apk";
+    window.location.href = "https://github.com/naitikagarwal-12/MilitaryEducatorInnerve/releases/download/AR/app-release.apk";
   };
 
   return (
