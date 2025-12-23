@@ -2,6 +2,10 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import { GiSupersonicBullet } from "react-icons/gi";
 
 const Model = () => {
+  const downloadAPK = () => {
+    window.location.href = "/app-release.apk";
+  };
+
   return (
     <section id="model" className="bg-[#5c4e41] text-white p-4">
       <div className="flex flex-col justify-center items-center">
@@ -56,7 +60,10 @@ const Model = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center items-center mt-5">
-              <button className="download-btn flex justify-center items-center gap-2 hover:scale-101 font-bold bg-[#b7987d] py-1 rounded-lg text-black ring-2 ring-black text-lg px-4 saira-condensed w-full transition-all duration-500 ease-in-out">
+              <button
+                onClick={downloadAPK}
+                className="download-btn flex justify-center items-center gap-2 hover:scale-101 font-bold bg-[#b7987d] py-1 rounded-lg text-black ring-2 ring-black text-lg px-4 saira-condensed w-full transition-all duration-500 ease-in-out"
+              >
                 Download
                 <MdOutlineFileDownload className="text-xl md:text-2xl" />
               </button>
